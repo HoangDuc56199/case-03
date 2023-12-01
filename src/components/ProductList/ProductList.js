@@ -1,52 +1,85 @@
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import {fetchData} from '../../redux/actions/action'
 
-import '../../style/style.css'
-import { useEffect } from "react";
 function ProductList() {
-  
-  useEffect(()=>{
-    axios.get("http://localhost:3001/products")
-      .then((res)=>{
-        const products= res.data
-      })
-  },[])
- 
-  
-  return (
-    <>
-      <div className="product-list-header">
-        <h1>Danh sách sản phẩm</h1>
-        <button style={{}}>Thêm sản phẩm</button>
-      </div>
-      <table>
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    useEffect(() => {
+    dispatch(fetchData());
+    }, [dispatch]);
+
+    const data = useSelector((state)=>state.product.products)
+    const handleCreate = (e)=>{
+        e.preventDefault();
+        navigate("/product/create")
+    }   
+    return ( <div>
+        <div style={{
+            display:'flex',
+            justifyContent:'space-between'
+        }}>
+            <h1>Danh sách sản phẩm</h1>
+            <Button variant="primary" onClick={handleCreate}>
+                Thêm sản phẩm
+            </Button>
+        </div>
         <thead>
-          <tr>
-            <th style={{width:'100'}}>#</th>
-            <th>Tên sản phẩm</th>
-            <th>Giá(đ)</th>
-            <th>Tồn kho</th>
-          </tr>
+            <tr>
+                <th style={{minWidth:'30px'}}>
+                    #
+                </th>
+                <th style={{minWidth:'200px'}}>
+                    Tên sản phẩm
+                </th>
+                <th style={{minWidth:'50px'}}>
+                    Giá(đ)
+                </th>
+                <th style={{minWidth:'50px'}}>
+                    Tồn kho
+                </th>
+                <th colSpan={2}>
+                </th>
+            </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Áo sơ mi đai tay nam</td>
-            <td>79500</td>
-            <td>100</td>
-            <td><div className="button button-blue"><Link to='/edit/:'>Cập nhật</Link></div></td>
-            <td><div className="button button-red"><Link to='delete/' >Xóa</Link></div></td>
-          </tr>
-          {products.map((item)=>(
-            <tr>
-
-            </tr>
-          ))}
+            {data.map((item)=>(<tr key={item.id}>
+                <td>
+                    {item.id}
+                </td>
+                <td>
+                    <Link to={`/product/detail/${item.id}`} style={{
+                        color:'black',
+                        textDecoration:'none'
+                    }}>{item.name}</Link>
+                    
+                </td>
+                <td>
+                   {item.price}
+                </td>
+                <td>
+                    {item.stock}
+                </td>
+                <td>
+                    <Link to={`/product/edit/${item.id}`}>
+                        <Button variant="primary">
+                            Cập nhật
+                        </Button>
+                    </Link>
+                </td>
+                <td>
+                    <Link to={`product/delete/${item.id}`}>
+                        <Button variant="danger">
+                            Xóa
+                        </Button>
+                    </Link>
+                </td>
+            </tr>))}
         </tbody>
-      </table>
-    </>
-  );
+    </div> );
 }
 
 export default ProductList;

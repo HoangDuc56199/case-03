@@ -1,24 +1,27 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProductList from '../src/components/ProductList/ProductList'
+import ProductDelete from './components/ProductDelete/ProductDelete'
+import ProductDetail from './components/ProductDetail/ProductDetail'
+import ProductEdit from './components/ProductEdit/ProductEdit'
+import CreateProduct from './components/CreateProduct/CreateProduct'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import ProductCreate from "./components/ProductCreate/ProductCreate";
-import ProductDelete from "./components/ProductDelete/ProductDelete";
-import ProductDetail from "./components/ProductDetail/ProductDetail";
-import ProductEdit from "./components/ProductEdit/ProductEdit";
-import ProductList from "./components/ProductList/ProductList"
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/create" element={<ProductCreate />} />
-          <Route path="/delete/:id" element={<ProductDelete />} />
-          <Route path="/detail" element={<ProductDetail />} />
-          <Route path="/" element={<ProductList />} />
-          <Route path="/edit" element={<ProductEdit />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <div style={{
+      maxWidth:'1000px',
+      margin:'100px'
+    }}>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<ProductList />}/>
+        <Route path={`/product/detail/:id`} element={<ProductDetail />}/>
+        <Route path='/product/delete/:id' element={<ProductDelete />}/>
+        <Route path='/product/create' element={<CreateProduct />}/>
+        <Route path='/product/edit/:id' element={<ProductEdit />}/>
+      </Routes>
+    </BrowserRouter>
+    </div>
   );
 }
 
